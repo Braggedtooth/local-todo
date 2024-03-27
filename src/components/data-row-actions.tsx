@@ -2,7 +2,7 @@ import { Row } from "@tanstack/react-table";
 import { TodoForm } from "./todos";
 import { Todo, useStore } from "@/hooks/use-store";
 import { Button } from "./ui/button";
-import { Cross2Icon, CrossCircledIcon } from "@radix-ui/react-icons";
+import { Cross2Icon } from "@radix-ui/react-icons";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
