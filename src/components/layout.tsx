@@ -1,5 +1,3 @@
-import { Menu, Package2 } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { CategoriesList } from "./categories";
@@ -9,6 +7,7 @@ import { Heading } from "./category-heading";
 import { useToggle } from "usehooks-ts";
 import { Byob } from "./header";
 import { Onboarding } from "./onboarding";
+import { Icons } from "./icons";
 
 export function Dashboard() {
   const [open, toggle] = useToggle(false);
@@ -18,7 +17,8 @@ export function Dashboard() {
         <div className="flex h-full max-h-screen flex-col gap-2">
           <div className="h-18 flex items-center border-b px-4 lg:h-[60px] lg:px-6">
             <a href="/" className="flex items-center gap-2 font-semibold">
-              <Package2 className="h-6 w-6" />
+              <Icons.logo className="h-6 w-6" />
+
               <span className="">Local Todo</span>
             </a>
           </div>
@@ -36,7 +36,7 @@ export function Dashboard() {
                 size="icon"
                 className="shrink-0 md:hidden"
               >
-                <Menu className="h-5 w-5" />
+                <Icons.menu className="h-5 w-5" />
                 <span className="sr-only">Toggle navigation menu</span>
               </Button>
             </SheetTrigger>

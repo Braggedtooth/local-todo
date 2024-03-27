@@ -236,7 +236,7 @@ const AddHeader = () => {
 
 const ExportButton = () => {
   const exportData = () => {
-    const data = JSON.stringify(localStorage);
+    const data = JSON.stringify(localStorage, null, "\t");
     const blob = new Blob([data], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");

@@ -33,7 +33,7 @@ export const CategoriesList = ({ toggle }: { toggle?: () => void }) => {
               toggle?.();
             }}
             className={cn(
-              "mx-[-0.65rem] flex cursor-pointer items-center gap-4 rounded-xl px-3 py-2  text-muted-foreground hover:text-foreground",
+              " flex cursor-pointer items-center gap-4 rounded-lg px-3 py-2  text-muted-foreground hover:text-foreground",
               store.currentTodoListId === category.id &&
                 "bg-muted text-foreground ",
             )}
