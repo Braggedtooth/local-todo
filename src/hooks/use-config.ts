@@ -5,6 +5,7 @@ export interface Config {
   headers: Record<string, string>;
   byob: boolean;
   showOnboarding: boolean;
+  forcePush: boolean;
 }
 export const useConfig = () => {
   const [config, setConfig] = useLocalStorage<Config>("config", {
@@ -14,6 +15,7 @@ export const useConfig = () => {
     },
     byob: false,
     showOnboarding: true,
+    forcePush: false,
   });
   const addHeaders = (key: string, value: string) => {
     setConfig((prev) => ({
@@ -38,6 +40,10 @@ export const useConfig = () => {
   const toggleOnboardingScreen = () => {
     setConfig((prev) => ({ ...prev, showOnboarding: !prev.showOnboarding }));
   };
+  const toggleForcePush = () => {
+    console.log("force push", config.forcePush);
+    setConfig((prev) => ({ ...prev, forcePush: !prev.forcePush }));
+  };
   return {
     config,
     setBackendUrl,
@@ -45,5 +51,6 @@ export const useConfig = () => {
     removeHeaders,
     toggleByob,
     toggleOnboardingScreen,
+    toggleForcePush,
   };
 };

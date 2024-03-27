@@ -180,14 +180,21 @@ export const DocsModal = () => {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button variant="link">View Docs</Button>
+        <Button variant="outline">View Docs</Button>
       </SheetTrigger>
-      <SheetContent side="left">
-        <SheetHeader>
-          <SheetTitle>BYOB Documentation</SheetTitle>
-          <SheetDescription>
-            BYOB stands for Bring Your Own Backend. When enabled, the app will
-            send event to the specified backend URL with the specified headers.
+      <SheetContent side="left" className="flex h-full max-h-screen flex-col">
+        <SheetHeader className="mb-2">
+          <SheetTitle>{data.title}</SheetTitle>
+          <SheetDescription className="">
+            <p className="text-pretty text-left">
+              BYOB (Bring Your Own Backend) mode allows the application to
+              interact with a user-provided backend.
+              <br />
+              <span className="text-pretty ">
+                When BYOB mode is enabled, the application will send events to
+                the backend URL specified in the configuration.
+              </span>
+            </p>
           </SheetDescription>
         </SheetHeader>
         <ScrollArea className="h-[85%] overflow-y-auto">

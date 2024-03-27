@@ -1,19 +1,32 @@
 import { useConfig } from "@/hooks/use-config";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-import { cn } from "@/lib/utils";
 import { Input } from "./ui/input";
 import { Switch } from "./ui/switch";
 import { Button } from "./ui/button";
-import { PlusIcon, Settings, XCircleIcon } from "lucide-react";
+
 import { useState } from "react";
 import { useStore } from "@/hooks/use-store";
-import { ArrowUpIcon, ArrowDownIcon, ReloadIcon } from "@radix-ui/react-icons";
+import {
+  ArrowUpIcon,
+  ArrowDownIcon,
+  ReloadIcon,
+  GearIcon,
+  Cross1Icon,
+  PlusIcon,
+} from "@radix-ui/react-icons";
 import { DocsModal } from "./docs-modal";
 import { useDebounceValue } from "usehooks-ts";
+import { Label } from "./ui/label";
+import { cn } from "@/lib/utils";
 
 export const Byob = () => {
-  const { config, toggleByob, setBackendUrl, toggleOnboardingScreen } =
-    useConfig();
+  const {
+    config,
+    toggleByob,
+    setBackendUrl,
+    toggleOnboardingScreen,
+    toggleForcePush,
+  } = useConfig();
   const [url, setUrl] = useState(config.backendUrl ?? "");
   const [backendUrl] = useDebounceValue(url, 500);
   const {
@@ -36,25 +49,19 @@ export const Byob = () => {
     <Popover>
       <PopoverTrigger>
         <div className="flex items-center gap-2 text-sm font-medium">
-          <Settings className="h-5 w-5" />
+          <GearIcon
+            className={cn("h-5 w-5", config.byob && " text-green-500")}
+          />
           <span>BYOB</span>
-          <span
-            className={cn(
-              "text-muted-foreground",
-              config.byob && "text-green-400",
-            )}
-          >
-            {config.byob ? "Enabled" : "Disabled"}
-          </span>
         </div>
       </PopoverTrigger>
-      <PopoverContent className="w-[28rem]">
-        <div className="flex flex-col gap-2 p-4">
+      <PopoverContent className="w-80">
+        <div className="flex flex-col gap-2 ">
           <p className="text-sm text-muted-foreground">
             BYOB stands for Bring Your Own Backend. When enabled, the app will
             send event to the specified backend URL with the specified headers.
-            <DocsModal />
           </p>
+          <DocsModal />
           <div className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
             <p className="text-sm text-muted-foreground">Enable BYOB</p>
             <Switch
@@ -125,6 +132,16 @@ export const Byob = () => {
                       Data is not in sync
                     </p>
                   )}
+                  {shouldPull && !shouldPush && (
+                    <div className="flex flex-row items-center gap-2">
+                      <Switch
+                        id="force-push"
+                        checked={!config.forcePush}
+                        onCheckedChange={toggleForcePush}
+                      />
+                      <Label htmlFor="force-push">Force push?</Label>
+                    </div>
+                  )}
                 </div>
                 <div className="flex flex-row space-x-2 ">
                   <Button
@@ -194,7 +211,7 @@ const HeaderItem = ({ hkey, value }: { hkey: string; value: string }) => {
         className="h-6 w-6"
         onClick={() => removeHeaders(hkey)}
       >
-        <XCircleIcon className="h-4 w-4" />
+        <Cross1Icon className="h-4 w-4" />
       </Button>
     </div>
   );

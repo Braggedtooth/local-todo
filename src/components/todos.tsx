@@ -34,11 +34,7 @@ export const TodoList = () => {
   if (todos.length === 0) {
     return <EmptyState />;
   }
-  return (
-    <div>
-      <DataTable data={todos} columns={columns} />
-    </div>
-  );
+  return <DataTable data={todos} columns={columns} />;
 };
 
 export const TodoItem = ({ todo }: { todo: Todo }) => {

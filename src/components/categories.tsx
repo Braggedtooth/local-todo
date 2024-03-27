@@ -23,8 +23,8 @@ export const CategoriesList = ({ toggle }: { toggle?: () => void }) => {
     setCategories(store.todoList);
   }, [store.todoList]);
   return (
-    <div className="grid gap-2 px-4 text-lg font-medium">
-      <ScrollArea className="max-h-[45rem]">
+    <>
+      <ScrollArea className="h-[50%] lg:h-[45rem]">
         {categories.map((category) => (
           <div
             key={category.id}
@@ -48,7 +48,7 @@ export const CategoriesList = ({ toggle }: { toggle?: () => void }) => {
           toggle?.();
         }}
       />
-    </div>
+    </>
   );
 };
 

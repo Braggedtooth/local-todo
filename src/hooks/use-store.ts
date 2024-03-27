@@ -1,15 +1,13 @@
 import {
-  QuestionMarkCircledIcon,
-  StopwatchIcon,
-  CheckCircledIcon,
   CrossCircledIcon,
-} from "@radix-ui/react-icons";
-import {
   CircleIcon,
+  ClockIcon,
+  CheckIcon,
+  QuestionMarkCircledIcon,
   ArrowDownIcon,
   ArrowRightIcon,
   ArrowUpIcon,
-} from "lucide-react";
+} from "@radix-ui/react-icons";
 
 import { toast } from "sonner";
 import { useLocalStorage, useReadLocalStorage } from "usehooks-ts";
@@ -35,12 +33,12 @@ export const statuses = [
   {
     value: "in progress",
     label: "In Progress",
-    icon: StopwatchIcon,
+    icon: ClockIcon,
   },
   {
     value: "done",
     label: "Done",
-    icon: CheckCircledIcon,
+    icon: CheckIcon,
   },
   {
     value: "canceled",
@@ -102,12 +100,15 @@ export const useStore = () => {
   } = useQuery({
     queryKey: ["remote_data"],
     queryFn: fetchRemoteStore,
-    enabled: config?.byob,
+    enabled: config?.byob && !!config?.backendUrl,
     retry: 1,
   });
 
   const { mutate } = useMutation({
     mutationFn: (event: Event) => publishEvent(event),
+    onSuccess() {
+      utils.invalidateQueries({ queryKey: ["remote_data"] });
+    },
   });
   const utils = useQueryClient();
   const { mutate: syncMutate, isPending } = useMutation({
@@ -149,6 +150,7 @@ export const useStore = () => {
       return;
     }
     setStore({ ...store, todoList: newTodoListArray, currentTodoListId: null });
+    toast.success("Category deleted successfully");
     mutate({ type: "delete_todo_list", payload: { id } });
   };
   const addTodo = (todo: Omit<Todo, "id">) => {
@@ -214,16 +216,17 @@ export const useStore = () => {
   };
 
   const pullRemoteStore = async () => {
-    console.log("pulling remote store");
     refetch();
     if (!remoteData) {
       return;
     }
-    console.log("remoteData", remoteData);
+    const combinedTodos = createSafeDiff(store.todos, remoteData.todos);
+    const combinedLists = createSafeDiff(store.todoList, remoteData.todoList);
+
     setStore((prev) => ({
       ...prev,
-      todoList: [...remoteData.todoList],
-      todos: [...remoteData.todos],
+      todoList: [...prev.todoList, ...combinedLists],
+      todos: [...prev.todos, ...combinedTodos],
     }));
   };
 
@@ -301,13 +304,12 @@ type Event =
 const getConfig = () => {
   const config = localStorage.getItem("config");
   if (config) {
-    return JSON.parse(config);
+    return JSON.parse(config) as Config;
   }
   return {
     backendUrl: "",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: {},
+    forcePush: false,
     byob: false,
   };
 };
@@ -359,6 +361,7 @@ export const syncStore = async (store: TodoStore) => {
     payload: {
       todoLists: store.todoList,
       todos: store.todos,
+      force: config.forcePush,
     },
   };
 
@@ -375,4 +378,9 @@ export const syncStore = async (store: TodoStore) => {
     toast.error(`failed to sync store to ${config.backendUrl}`);
     console.error(error);
   }
+};
+
+const createSafeDiff = <T extends { id: number }>(store: T[], remote: T[]) => {
+  const diff = remote.filter((r) => !store.some((s) => s.id === r.id));
+  return diff;
 };

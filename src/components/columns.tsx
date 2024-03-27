@@ -7,9 +7,14 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { CaretSortIcon, EyeNoneIcon } from "@radix-ui/react-icons";
+import {
+  ArrowDownIcon,
+  ArrowUpIcon,
+  CaretSortIcon,
+  EyeNoneIcon,
+} from "@radix-ui/react-icons";
 import { Column, ColumnDef } from "@tanstack/react-table";
-import { ArrowDownIcon, ArrowUpIcon } from "lucide-react";
+
 import { Button } from "./ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableRowActions } from "./data-row-actions";
