@@ -4,6 +4,7 @@ export interface Config {
   backendUrl: string;
   headers: Record<string, string>;
   byob: boolean;
+  showOnboarding: boolean;
 }
 export const useConfig = () => {
   const [config, setConfig] = useLocalStorage<Config>("config", {
@@ -12,6 +13,7 @@ export const useConfig = () => {
       "Content-Type": "application/json",
     },
     byob: false,
+    showOnboarding: true,
   });
   const addHeaders = (key: string, value: string) => {
     setConfig((prev) => ({
@@ -33,6 +35,15 @@ export const useConfig = () => {
   const setBackendUrl = (url: string) => {
     setConfig((prev) => ({ ...prev, backendUrl: url }));
   };
-
-  return { config, setBackendUrl, addHeaders, removeHeaders, toggleByob };
+  const toggleOnboardingScreen = () => {
+    setConfig((prev) => ({ ...prev, showOnboarding: !prev.showOnboarding }));
+  };
+  return {
+    config,
+    setBackendUrl,
+    addHeaders,
+    removeHeaders,
+    toggleByob,
+    toggleOnboardingScreen,
+  };
 };

@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { Input } from "./ui/input";
 import { Switch } from "./ui/switch";
 import { Button } from "./ui/button";
-import { PlusIcon, XCircleIcon } from "lucide-react";
+import { PlusIcon, Settings, XCircleIcon } from "lucide-react";
 import { useState } from "react";
 import { useStore } from "@/hooks/use-store";
 import { ArrowUpIcon, ArrowDownIcon, ReloadIcon } from "@radix-ui/react-icons";
@@ -12,7 +12,8 @@ import { DocsModal } from "./docs-modal";
 import { useDebounceValue } from "usehooks-ts";
 
 export const Byob = () => {
-  const { config, toggleByob, setBackendUrl } = useConfig();
+  const { config, toggleByob, setBackendUrl, toggleOnboardingScreen } =
+    useConfig();
   const [url, setUrl] = useState(config.backendUrl ?? "");
   const [backendUrl] = useDebounceValue(url, 500);
   const {
@@ -35,6 +36,7 @@ export const Byob = () => {
     <Popover>
       <PopoverTrigger>
         <div className="flex items-center gap-2 text-sm font-medium">
+          <Settings className="h-5 w-5" />
           <span>BYOB</span>
           <span
             className={cn(
@@ -124,12 +126,10 @@ export const Byob = () => {
                     </p>
                   )}
                 </div>
-              </div>
-              <div className="flex flex-col space-y-5 rounded-lg border p-3 shadow-sm">
-                <div className="f flex flex-row gap-2">
+                <div className="flex flex-row space-x-2 ">
                   <Button
                     variant="secondary"
-                    className="flex w-full items-center gap-2 space-x-2 "
+                    className="my-2 flex w-full items-center gap-2 "
                     disabled={!shouldPush || pushLoading}
                     onClick={() => pushRemoteStore()}
                   >
@@ -141,7 +141,7 @@ export const Byob = () => {
                   </Button>
                   <Button
                     variant="secondary"
-                    className="flex w-full items-center gap-2 space-x-2 "
+                    className="my-2 flex w-full items-center gap-2  space-x-2 "
                     disabled={!shouldPull || pullLoading}
                     onClick={pullRemoteStore}
                   >
@@ -156,6 +156,19 @@ export const Byob = () => {
               </div>
             </div>
           )}
+          <div className="flex flex-col space-y-5 rounded-lg border p-3 shadow-sm">
+            <p className="text-sm text-muted-foreground">
+              Show Onboarding Screen
+            </p>
+
+            <Button
+              onClick={toggleOnboardingScreen}
+              variant="outline"
+              className="button button-primary"
+            >
+              Show Onboarding
+            </Button>
+          </div>
         </div>
       </PopoverContent>
     </Popover>
@@ -232,7 +245,7 @@ const ExportButton = () => {
     a.click();
   };
   return (
-    <Button variant="outline" onClick={exportData}>
+    <Button variant="outline" onClick={exportData} className="mt-4">
       Export Data
     </Button>
   );

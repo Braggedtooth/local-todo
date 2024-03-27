@@ -8,6 +8,7 @@ import { TodoList } from "./todos";
 import { Heading } from "./category-heading";
 import { useToggle } from "usehooks-ts";
 import { Byob } from "./header";
+import { Onboarding } from "./onboarding";
 
 export function Dashboard() {
   const [open, toggle] = useToggle(false);
@@ -51,6 +52,7 @@ export function Dashboard() {
           <div className="">
             <TodoList />
           </div>
+          <Onboarding />
         </main>
       </div>
     </div>
