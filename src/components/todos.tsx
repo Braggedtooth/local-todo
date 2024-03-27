@@ -4,8 +4,8 @@ import {
   TodoStatus,
   priorities,
   statuses,
-  useTodos,
-} from "@/hooks/use-todos";
+  useStore,
+} from "@/hooks/use-store";
 import { Button } from "./ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
 import { useState } from "react";
@@ -24,9 +24,10 @@ import { DataTable } from "./data-table";
 import { columns } from "./columns";
 import { Textarea } from "./ui/textarea";
 import { CategoryForm } from "./categories";
+import { toast } from "sonner";
 
 export const TodoList = () => {
-  const { store } = useTodos();
+  const { store } = useStore();
   const todos = store.todos.filter(
     (todo) => todo.todoListId === store.currentTodoListId,
   );
@@ -54,11 +55,13 @@ export const TodoForm = ({
   listId,
   onSubmit,
   defaultValues,
+  successMessage,
 }: {
   label?: string;
   listId: number;
   onSubmit: (todo: Omit<Todo, "id">) => void;
   defaultValues?: Omit<Todo, "id">;
+  successMessage?: string;
 }) => {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState(defaultValues?.title ?? "");
@@ -73,6 +76,9 @@ export const TodoForm = ({
     e.preventDefault();
     onSubmit({ title, description, status, priority, todoListId: listId });
     setOpen(false);
+    setTitle("");
+    setDescription("");
+    toast.success(successMessage ?? "Todo added successfully");
   };
 
   return (
@@ -153,7 +159,7 @@ export const TodoForm = ({
 };
 
 const EmptyState = () => {
-  const { addTodo, store, addTodoList } = useTodos();
+  const { addTodo, store, addTodoList } = useStore();
 
   return (
     <div className="flex flex-col items-center gap-1 text-center">

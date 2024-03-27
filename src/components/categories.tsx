@@ -1,4 +1,4 @@
-import { useTodos } from "@/hooks/use-todos";
+import { useStore } from "@/hooks/use-store";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import {
@@ -16,12 +16,12 @@ import { cn } from "@/lib/utils";
 import { ScrollArea } from "./ui/scroll-area";
 
 export const CategoriesList = ({ toggle }: { toggle?: () => void }) => {
-  const { store, toggleJsonView, setActiveTodoList, addTodoList } = useTodos();
-  const [categories, setCategories] = useState(store.todolist);
+  const { store, setActiveTodoList, addTodoList } = useStore();
+  const [categories, setCategories] = useState(store.todoList);
 
   useEffect(() => {
-    setCategories(store.todolist);
-  }, [store.todolist]);
+    setCategories(store.todoList);
+  }, [store.todoList]);
   return (
     <div className="grid gap-2 px-4 text-lg font-medium">
       <ScrollArea className="max-h-[45rem]">
@@ -48,14 +48,6 @@ export const CategoriesList = ({ toggle }: { toggle?: () => void }) => {
           toggle?.();
         }}
       />
-      <Button
-        onClick={() => {
-          toggleJsonView();
-          toggle?.();
-        }}
-      >
-        View Json
-      </Button>
     </div>
   );
 };

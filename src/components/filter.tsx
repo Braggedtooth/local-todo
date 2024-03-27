@@ -19,6 +19,7 @@ import {
   CommandItem,
   CommandSeparator,
 } from "@/components/ui/command";
+import { Separator } from "./ui/seperator";
 
 interface DataTableFacetedFilterProps<TData, TValue> {
   column?: Column<TData, TValue>;
@@ -46,7 +47,7 @@ export function DataTableFacetedFilter<TData, TValue>({
           {title}
           {selectedValues?.size > 0 && (
             <>
-              {/* <Separator orientation="vertical" className="mx-2 h-4" /> */}
+              <Separator orientation="vertical" className="mx-2 h-4" />
               <Badge
                 variant="secondary"
                 className="rounded-sm px-1 font-normal lg:hidden"

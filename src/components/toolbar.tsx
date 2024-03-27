@@ -5,7 +5,7 @@ import { Table } from "@tanstack/react-table";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { DataTableViewOptions } from "./view-options";
-import { statuses, priorities, useTodos } from "@/hooks/use-todos";
+import { statuses, priorities, useStore } from "@/hooks/use-store";
 import { DataTableFacetedFilter } from "./filter";
 import { TodoForm } from "./todos";
 
@@ -17,7 +17,7 @@ export function DataTableToolbar<TData>({
   table,
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0;
-  const { addTodo, store } = useTodos();
+  const { addTodo, store } = useStore();
   return (
     <div className="flex items-center justify-between">
       <div className="flex flex-1 items-center space-x-2">

@@ -1,4 +1,4 @@
-import { Todo, priorities, statuses } from "@/hooks/use-todos";
+import { Todo, priorities, statuses } from "@/hooks/use-store";
 import { cn } from "@/lib/utils";
 import {
   DropdownMenu,
@@ -91,18 +91,20 @@ export const columns: ColumnDef<Todo>[] = [
         className="translate-y-[2px]"
       />
     ),
+
     enableSorting: false,
     enableHiding: false,
   },
-  //   {
-  //     accessorKey: "id",
-  //     header: ({ column }) => (
-  //       <DataTableColumnHeader column={column} title="Task" />
-  //     ),
-  //     cell: ({ row }) => <div className="w-[80px]">{row.getValue("id")}</div>,
-  //     enableSorting: false,
-  //     enableHiding: false,
-  //   },
+  {
+    accessorKey: "id",
+    size: 10,
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="ID" />
+    ),
+    cell: ({ row }) => <div>{row.getValue("id")}</div>,
+    enableSorting: false,
+    enableHiding: false,
+  },
   {
     accessorKey: "title",
     header: ({ column }) => (
@@ -120,6 +122,18 @@ export const columns: ColumnDef<Todo>[] = [
         </div>
       );
     },
+  },
+  {
+    accessorKey: "description",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Description" />
+    ),
+    cell: ({ row }) => (
+      <span className="max-w-[500px] truncate">
+        {row.getValue("description")}
+      </span>
+    ),
+    enableHiding: true,
   },
   {
     accessorKey: "status",
