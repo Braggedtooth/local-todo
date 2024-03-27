@@ -24,7 +24,7 @@ export const CategoriesList = ({ toggle }: { toggle?: () => void }) => {
   }, [store.todoList]);
   return (
     <>
-      <ScrollArea className="h-[50%] lg:h-[45rem]">
+      <ScrollArea className="h-[45rem] md:h-[40rem]">
         {categories.map((category) => (
           <div
             key={category.id}
@@ -92,7 +92,11 @@ export const CategoryForm = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">{triggerLabel}</Button>
+        <Button
+          variant={triggerLabel === "Add Category" ? "default" : "outline"}
+        >
+          {triggerLabel}
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

@@ -1,5 +1,4 @@
 import { useConfig } from "@/hooks/use-config";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Input } from "./ui/input";
 import { Switch } from "./ui/switch";
 import { Button } from "./ui/button";
@@ -18,6 +17,8 @@ import { DocsModal } from "./docs-modal";
 import { useDebounceValue } from "usehooks-ts";
 import { Label } from "./ui/label";
 import { cn } from "@/lib/utils";
+import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
+import { ScrollArea } from "./ui/scroll-area";
 
 export const Byob = () => {
   const {
@@ -46,16 +47,14 @@ export const Byob = () => {
   const shouldPull = remoteTodoCount > todoCount || remoteListCount > listCount; // if remote data is more than local data then pull
 
   return (
-    <Popover>
-      <PopoverTrigger>
+    <Sheet>
+      <SheetTrigger>
         <div className="flex items-center gap-2 text-sm font-medium">
-          <GearIcon
-            className={cn("h-5 w-5", config.byob && " text-green-500")}
-          />
-          <span>BYOB</span>
+          <GearIcon className={cn("h-5 w-5", config.byob && "text-primary")} />
+          <span className={cn(config.byob && "text-primary")}>BYOB</span>
         </div>
-      </PopoverTrigger>
-      <PopoverContent className="w-80">
+      </SheetTrigger>
+      <SheetContent side="left" className="w-80">
         <div className="flex flex-col gap-2 ">
           <p className="text-sm text-muted-foreground">
             BYOB stands for Bring Your Own Backend. When enabled, the app will
@@ -69,110 +68,120 @@ export const Byob = () => {
               onCheckedChange={toggleByob}
             />
           </div>
-
-          {config.byob && (
+          <ScrollArea className="h-80 max-h-svh overflow-y-auto py-3 lg:h-full">
             <div className="space-y-4">
-              <div className="flex flex-col space-y-2 rounded-lg border p-3 shadow-sm">
-                <span className="text-sm text-muted-foreground">
-                  Backend URL
-                </span>
-                <div className="flex gap-2">
-                  <Input
-                    type="text"
-                    placeholder="Backend URL"
-                    value={url}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      setUrl(value);
-                    }}
-                    className="input"
-                  />
-                  {config.backendUrl ? (
-                    <Button
-                      onClick={() => {
-                        setBackendUrl("");
-                      }}
-                      className="button button-secondary"
-                    >
-                      Clear
-                    </Button>
-                  ) : (
-                    <Button
-                      onClick={() => {
-                        setBackendUrl(backendUrl);
-                      }}
-                      className="button button-secondary"
-                    >
-                      Set
-                    </Button>
-                  )}
-                </div>
-              </div>
-              <div className="flex flex-col rounded-lg border p-3 shadow-sm">
-                <span className="text-sm text-muted-foreground">Headers</span>
-                <div className="flex w-full  flex-col gap-2 space-y-0.5 py-2">
-                  {Object.entries(config.headers).map(([key, value]) => (
-                    <HeaderItem hkey={key} value={value} key={key} />
-                  ))}
-                </div>
-                <AddHeader />
-              </div>
-              <div className="flex flex-col rounded-lg border p-3 shadow-sm">
-                <span className="text-sm text-muted-foreground">Data Sync</span>
-                <p className="text-sm text-muted-foreground">
-                  Sync your data with the remote server
-                </p>
-                <div className="flex flex-row items-center gap-2">
-                  {!shouldPush && !shouldPull ? (
-                    <p className="w-full py-2 text-sm text-green-500">
-                      Data is in sync
-                    </p>
-                  ) : (
-                    <p className="w-full py-2 text-sm text-red-500">
-                      Data is not in sync
-                    </p>
-                  )}
-                  {shouldPull && !shouldPush && (
-                    <div className="flex flex-row items-center gap-2">
-                      <Switch
-                        id="force-push"
-                        checked={!config.forcePush}
-                        onCheckedChange={toggleForcePush}
+              {config.byob && (
+                <div className="space-y-4">
+                  <div className="flex flex-col space-y-2 rounded-lg border p-3 shadow-sm">
+                    <span className="text-sm text-muted-foreground">
+                      Backend URL
+                    </span>
+                    <div className="flex gap-2">
+                      <Input
+                        type="text"
+                        placeholder="Backend URL"
+                        value={url}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          setUrl(value);
+                        }}
+                        className="input"
                       />
-                      <Label htmlFor="force-push">Force push?</Label>
+                      {config.backendUrl ? (
+                        <Button
+                          onClick={() => {
+                            setBackendUrl("");
+                          }}
+                          className="button button-secondary"
+                        >
+                          Clear
+                        </Button>
+                      ) : (
+                        <Button
+                          onClick={() => {
+                            setBackendUrl(backendUrl);
+                          }}
+                          className="button button-secondary"
+                        >
+                          Set
+                        </Button>
+                      )}
                     </div>
-                  )}
+                  </div>
+                  <div className="flex flex-col rounded-lg border p-3 shadow-sm">
+                    <span className="text-sm text-muted-foreground">
+                      Headers
+                    </span>
+                    <div className="flex w-full  flex-col gap-2 space-y-0.5 py-2">
+                      {Object.entries(config.headers).map(([key, value]) => (
+                        <HeaderItem hkey={key} value={value} key={key} />
+                      ))}
+                    </div>
+                    <AddHeader />
+                  </div>
+                  <div className="flex flex-col rounded-lg border p-3 shadow-sm">
+                    <span className="text-sm text-muted-foreground">
+                      Data Sync
+                    </span>
+                    <p className="text-sm text-muted-foreground">
+                      Sync your data with the remote server
+                    </p>
+                    <div className="flex flex-row items-center gap-2">
+                      {!shouldPush && !shouldPull ? (
+                        <p className="w-full py-2 text-sm text-green-500">
+                          Data is in sync
+                        </p>
+                      ) : (
+                        <p className="w-full py-2 text-sm text-red-500">
+                          Data is not in sync
+                        </p>
+                      )}
+                      {shouldPull && !shouldPush && (
+                        <div className="flex flex-row items-center gap-2">
+                          <Switch
+                            id="force-push"
+                            checked={!config.forcePush}
+                            onCheckedChange={toggleForcePush}
+                          />
+                          <Label htmlFor="force-push">Force push?</Label>
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex flex-row space-x-2 ">
+                      <Button
+                        variant="secondary"
+                        className="my-2 flex w-full items-center gap-2 "
+                        disabled={!shouldPush || pushLoading}
+                        onClick={() => pushRemoteStore()}
+                      >
+                        {pushLoading && (
+                          <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                        )}
+                        Push
+                        <ArrowUpIcon className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="secondary"
+                        className="my-2 flex w-full items-center gap-2  space-x-2 "
+                        disabled={!shouldPull || pullLoading}
+                        onClick={pullRemoteStore}
+                      >
+                        {pullLoading && (
+                          <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                        )}
+                        Pull
+                        <ArrowDownIcon className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
                 </div>
-                <div className="flex flex-row space-x-2 ">
-                  <Button
-                    variant="secondary"
-                    className="my-2 flex w-full items-center gap-2 "
-                    disabled={!shouldPush || pushLoading}
-                    onClick={() => pushRemoteStore()}
-                  >
-                    {pushLoading && (
-                      <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-                    )}
-                    Push
-                    <ArrowUpIcon className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant="secondary"
-                    className="my-2 flex w-full items-center gap-2  space-x-2 "
-                    disabled={!shouldPull || pullLoading}
-                    onClick={pullRemoteStore}
-                  >
-                    {pullLoading && (
-                      <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-                    )}
-                    Pull
-                    <ArrowDownIcon className="h-4 w-4" />
-                  </Button>
-                </div>
+              )}
+              <div className="flex flex-col space-y-5 rounded-lg border p-3 shadow-sm">
+                <p className="text-sm text-muted-foreground">Export Data</p>
                 <ExportButton />
               </div>
             </div>
-          )}
+          </ScrollArea>
           <div className="flex flex-col space-y-5 rounded-lg border p-3 shadow-sm">
             <p className="text-sm text-muted-foreground">
               Show Onboarding Screen
@@ -187,8 +196,8 @@ export const Byob = () => {
             </Button>
           </div>
         </div>
-      </PopoverContent>
-    </Popover>
+      </SheetContent>
+    </Sheet>
   );
 };
 

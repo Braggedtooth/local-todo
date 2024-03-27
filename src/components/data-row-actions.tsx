@@ -2,6 +2,7 @@ import { Row } from "@tanstack/react-table";
 import { TodoForm } from "./todos";
 import { Todo, useStore } from "@/hooks/use-store";
 import { Button } from "./ui/button";
+import { Cross2Icon, CrossCircledIcon } from "@radix-ui/react-icons";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
@@ -28,10 +29,9 @@ export function DataTableRowActions<TData>({
         onClick={() => {
           deleteTodo(task.id);
         }}
-        size="sm"
+        size="icon"
       >
-        {" "}
-        Delete{" "}
+        <Cross2Icon className="h-4 w-4" />
       </Button>
     </div>
   );

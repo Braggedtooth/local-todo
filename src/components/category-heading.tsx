@@ -1,6 +1,7 @@
 import { useStore } from "@/hooks/use-store";
 import { CategoryForm } from "@/components/categories";
 import { Button } from "@/components/ui/button";
+import { Cross2Icon } from "@radix-ui/react-icons";
 
 export const Heading = () => {
   const { store, deleteTodoList, updateTodoList } = useStore();
@@ -33,9 +34,10 @@ export const Heading = () => {
             <Button
               variant="destructive"
               className="shrink-0"
+              size="icon"
               onClick={() => deleteTodoList(currentCategory?.id)}
             >
-              Delete
+              <Cross2Icon className="h-4 w-4" />
             </Button>
           </div>
         )}

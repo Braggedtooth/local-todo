@@ -337,20 +337,22 @@ const publishEvent = async (event: Event) => {
 
 const fetchRemoteStore = async () => {
   const config = getConfig();
-  try {
-    const response = (await ky
-      .get(config.backendUrl, {
-        headers: {
-          "Content-Type": "application/json",
-          ...config.headers,
-        },
-      })
-      .json()) as Omit<TodoStore, "jsonView" | "currentTodoListId">;
+  if (config.byob && !config.backendUrl) {
+    try {
+      const response = (await ky
+        .get(config.backendUrl, {
+          headers: {
+            "Content-Type": "application/json",
+            ...config.headers,
+          },
+        })
+        .json()) as Omit<TodoStore, "jsonView" | "currentTodoListId">;
 
-    return response;
-  } catch (error) {
-    toast.error(`failed to fetch remote store from ${config.backendUrl}`);
-    console.error(error);
+      return response;
+    } catch (error) {
+      toast.error(`failed to fetch remote store from ${config.backendUrl}`);
+      console.error(error);
+    }
   }
 };
 

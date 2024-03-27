@@ -201,10 +201,7 @@ export const DocsModal = () => {
           <div className="grid gap-4 py-4">
             {data.events.map((event) => {
               return (
-                <div
-                  key={event.type}
-                  className="rounded-lg bg-white p-4 shadow-sm"
-                >
+                <div key={event.type} className="rounded-lg p-4 shadow-sm">
                   <h3 className="text-lg font-semibold">{event.type}</h3>
                   <p className="text-sm text-muted-foreground">
                     {event.description}
@@ -212,7 +209,7 @@ export const DocsModal = () => {
                   <div className="grid grid-cols-2 gap-2">
                     <div>
                       <h4 className="text-sm font-semibold">Payload</h4>
-                      <pre className="w-full text-sm text-gray-600">
+                      <pre className="w-full text-sm text-secondary-foreground">
                         {JSON.stringify(event.payload, null, 2)}
                       </pre>
                     </div>

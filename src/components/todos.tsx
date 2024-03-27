@@ -25,6 +25,7 @@ import { columns } from "./columns";
 import { Textarea } from "./ui/textarea";
 import { CategoryForm } from "./categories";
 import { toast } from "sonner";
+import { Pencil2Icon } from "@radix-ui/react-icons";
 
 export const TodoList = () => {
   const { store } = useStore();
@@ -35,15 +36,6 @@ export const TodoList = () => {
     return <EmptyState />;
   }
   return <DataTable data={todos} columns={columns} />;
-};
-
-export const TodoItem = ({ todo }: { todo: Todo }) => {
-  return (
-    <div>
-      <h3>{todo.title}</h3>
-      <p>{todo.description}</p>
-    </div>
-  );
 };
 
 export const TodoForm = ({
@@ -80,9 +72,15 @@ export const TodoForm = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size={"sm"}>
-          {label}
-        </Button>
+        {label === "Edit" ? (
+          <Button variant="outline" size="icon">
+            <Pencil2Icon className="h-4 w-4" />
+          </Button>
+        ) : (
+          <Button variant="default" size="sm">
+            {label}
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent>
         <form onSubmit={handleSubmit} className="flex flex-col space-y-5">
