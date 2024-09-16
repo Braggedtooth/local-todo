@@ -235,14 +235,14 @@ const AddHeader = () => {
     <div className="flex gap-2">
       <Input
         type="text"
-        placeholder="Key"
+        placeholder="Authorization"
         value={key}
         onChange={(e) => setKey(e.target.value)}
         className="input"
       />
       <Input
         type="text"
-        placeholder="Value"
+        placeholder="Bearer: xxxxxx"
         value={value}
         onChange={(e) => setValue(e.target.value)}
         className="input"

@@ -12,7 +12,7 @@ import { ScrollArea } from "./ui/scroll-area";
 const data = {
   title: "BYOB Documentation",
   description:
-    "BYOB (Bring Your Own Backend) mode allows the application to interact with a user-provided backend. When BYOB mode is enabled, the application will send events to the backend URL specified in the configuration.",
+    "BYOB (Bring Your Own Backend) mode allows the application to interact with a user-provided backend. When BYOB mode is enabled, the application will send post requests to the backend URL specified in the configuration.",
 
   events: [
     {
@@ -191,7 +191,7 @@ export const DocsModal = () => {
               interact with a user-provided backend.
               <br />
               <span className="text-pretty ">
-                When BYOB mode is enabled, the application will send events to
+                When BYOB mode is enabled, the application will send post requests to
                 the backend URL specified in the configuration.
               </span>
             </p>

@@ -315,7 +315,7 @@ const getConfig = () => {
 };
 const publishEvent = async (event: Event) => {
   const config = getConfig();
-  if (config.byob) {
+  if(!config.byob){ return}
     try {
       const response = (await ky
         .post(config.backendUrl, {
@@ -332,7 +332,6 @@ const publishEvent = async (event: Event) => {
       toast.error(`failed to publish event to ${config.backendUrl}`);
       console.error(error);
     }
-  }
 };
 
 const fetchRemoteStore = async () => {
