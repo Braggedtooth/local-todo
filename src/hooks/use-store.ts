@@ -125,7 +125,11 @@ export const useStore = () => {
       todoList: [...store.todoList, newTodoList],
       currentTodoListId: newTodoList.id,
     });
-    mutate({ type: "add_todo_list", payload: newTodoList });
+    if(config.byob && !!config.backendUrl){
+
+      mutate({ type: "add_todo_list", payload: newTodoList });
+
+    }
   };
   const updateTodoList = (
     id: number,
@@ -137,10 +141,14 @@ export const useStore = () => {
         t.id === id ? { ...t, ...updatedTodoList } : t,
       ),
     });
-    mutate({
-      type: "update_todo_list",
-      payload: { id, ...updatedTodoList },
-    });
+    if(config.byob && !!config.backendUrl){
+
+      mutate({
+        type: "update_todo_list",
+        payload: { id, ...updatedTodoList },
+      });
+    }
+  
   };
   const deleteTodoList = (id: number) => {
     const newTodoListArray = store.todoList.filter((t) => t.id !== id);
@@ -151,7 +159,9 @@ export const useStore = () => {
     }
     setStore({ ...store, todoList: newTodoListArray, currentTodoListId: null });
     toast.success("Category deleted successfully");
-    mutate({ type: "delete_todo_list", payload: { id } });
+    if(config.byob && !!config.backendUrl){
+      mutate({ type: "delete_todo_list", payload: { id } });
+    }
   };
   const addTodo = (todo: Omit<Todo, "id">) => {
     if (store.currentTodoListId === null) {
@@ -166,24 +176,26 @@ export const useStore = () => {
     setStore({ ...store, todos: [...store.todos, newTodo] });
 
     const list = store.todoList?.find((t) => t.id === store.currentTodoListId);
-    mutate({
-      type: "add_todo",
-      payload: {
-        todo: {
-          id: newTodo.id,
-          title: newTodo.title,
-          description: newTodo.description,
-          status: newTodo.status,
-          priority: newTodo.priority,
-          todoListId: newTodo.todoListId,
+    if(config.byob && !!config.backendUrl){
+      mutate({
+        type: "add_todo",
+        payload: {
+          todo: {
+            id: newTodo.id,
+            title: newTodo.title,
+            description: newTodo.description,
+            status: newTodo.status,
+            priority: newTodo.priority,
+            todoListId: newTodo.todoListId,
+          },
+          list: {
+            id: list?.id ?? 0,
+            title: list?.title ?? "",
+            description: list?.description ?? "",
+          },
         },
-        list: {
-          id: list?.id ?? 0,
-          title: list?.title ?? "",
-          description: list?.description ?? "",
-        },
-      },
-    });
+      });
+    }
   };
 
   const updateTodo = (id: number, updatedTodo: Omit<Todo, "id">) => {
@@ -194,22 +206,26 @@ export const useStore = () => {
       ),
     });
     const list = store.todoList.find((t) => t.id === store.currentTodoListId);
-    mutate({
-      type: "update_todo",
-      payload: {
-        todo: { id, ...updatedTodo },
-        list: {
-          id: list?.id ?? 0,
-          title: list?.title ?? "",
-          description: list?.description ?? "",
+    if(config.byob && !!config.backendUrl){
+      mutate({
+        type: "update_todo",
+        payload: {
+          todo: { id, ...updatedTodo },
+          list: {
+            id: list?.id ?? 0,
+            title: list?.title ?? "",
+            description: list?.description ?? "",
+          },
         },
-      },
-    });
+      });
+    }
   };
   const deleteTodo = (id: number) => {
     setStore({ ...store, todos: store.todos.filter((todo) => todo.id !== id) });
     toast.success("Todo deleted successfully");
-    mutate({ type: "delete_todo", payload: { id } });
+    if(config.byob && !!config.backendUrl){
+      mutate({ type: "delete_todo", payload: { id } });
+    }
   };
   const setActiveTodoList = (id: number) => {
     setStore({ ...store, currentTodoListId: id });
@@ -365,7 +381,9 @@ export const syncStore = async (store: TodoStore) => {
       force: config.forcePush,
     },
   };
-
+  if (!config.backendUrl) {
+    return
+  }
   try {
     await ky.post(config.backendUrl, {
       json: payload,
