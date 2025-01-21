@@ -239,7 +239,7 @@ export const useStore = () => {
     const combinedTodos = createSafeDiff(store.todos, remoteData.todos);
     const combinedLists = createSafeDiff(store.todoList, remoteData.todoList);
 
-    setStore((prev: { todoList: any; todos: any; }) => ({
+    setStore((prev: { currentTodoListId : number | null, todoList: TodoList[]; todos: Todo[]; }) => ({
       ...prev,
       todoList: [...prev.todoList, ...combinedLists],
       todos: [...prev.todos, ...combinedTodos],
