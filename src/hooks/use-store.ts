@@ -125,7 +125,7 @@ export const useStore = () => {
       todoList: [...store.todoList, newTodoList],
       currentTodoListId: newTodoList.id,
     });
-    if(config.byob && !!config.backendUrl){
+    if(config?.byob && !!config.backendUrl){
 
       mutate({ type: "add_todo_list", payload: newTodoList });
 
@@ -141,7 +141,7 @@ export const useStore = () => {
         t.id === id ? { ...t, ...updatedTodoList } : t,
       ),
     });
-    if(config.byob && !!config.backendUrl){
+    if(config?.byob && !!config.backendUrl){
 
       mutate({
         type: "update_todo_list",
@@ -159,7 +159,7 @@ export const useStore = () => {
     }
     setStore({ ...store, todoList: newTodoListArray, currentTodoListId: null });
     toast.success("Category deleted successfully");
-    if(config.byob && !!config.backendUrl){
+    if(config?.byob && !!config.backendUrl){
       mutate({ type: "delete_todo_list", payload: { id } });
     }
   };
@@ -176,7 +176,7 @@ export const useStore = () => {
     setStore({ ...store, todos: [...store.todos, newTodo] });
 
     const list = store.todoList?.find((t) => t.id === store.currentTodoListId);
-    if(config.byob && !!config.backendUrl){
+    if(config?.byob && !!config.backendUrl){
       mutate({
         type: "add_todo",
         payload: {
@@ -206,7 +206,7 @@ export const useStore = () => {
       ),
     });
     const list = store.todoList.find((t) => t.id === store.currentTodoListId);
-    if(config.byob && !!config.backendUrl){
+    if(config?.byob && !!config.backendUrl){
       mutate({
         type: "update_todo",
         payload: {
@@ -223,7 +223,7 @@ export const useStore = () => {
   const deleteTodo = (id: number) => {
     setStore({ ...store, todos: store.todos.filter((todo) => todo.id !== id) });
     toast.success("Todo deleted successfully");
-    if(config.byob && !!config.backendUrl){
+    if(config?.byob && !!config.backendUrl){
       mutate({ type: "delete_todo", payload: { id } });
     }
   };
@@ -239,7 +239,7 @@ export const useStore = () => {
     const combinedTodos = createSafeDiff(store.todos, remoteData.todos);
     const combinedLists = createSafeDiff(store.todoList, remoteData.todoList);
 
-    setStore((prev) => ({
+    setStore((prev: { todoList: any; todos: any; }) => ({
       ...prev,
       todoList: [...prev.todoList, ...combinedLists],
       todos: [...prev.todos, ...combinedTodos],
